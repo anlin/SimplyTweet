@@ -2,6 +2,7 @@ package com.thunder.simplytweet.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ public class TweetAdapters extends RecyclerView.Adapter<TweetAdapters.ViewHolder
         TextView body;
         @BindView(R.id.time)
         TextView timeAgo;
+        @BindView(R.id.mediaImage)
+        ImageView mediaImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -74,6 +77,12 @@ public class TweetAdapters extends RecyclerView.Adapter<TweetAdapters.ViewHolder
         holder.body.setText(tweet.getBody());
         holder.timeAgo.setText(Utils.getRelativeTimeAgo(tweet.getTimestamp()));
         Picasso.with(context).load(tweet.getProfileImageUrl()).into(holder.profile);
+        if(!TextUtils.isEmpty(tweet.getMediaImageUrl())){
+            Picasso.with(context).load(tweet.getMediaImageUrl()).fit().centerCrop().into(holder.mediaImage);
+        }
+        else{
+            holder.mediaImage.setVisibility(View.GONE);
+        }
     }
 
     @Override

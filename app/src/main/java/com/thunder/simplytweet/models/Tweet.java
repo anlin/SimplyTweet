@@ -36,6 +36,8 @@ public class Tweet extends BaseModel {
 	String body;
 	@Column
 	String profileImageUrl;
+	@Column
+	String mediaImageUrl;
 
 
 
@@ -54,6 +56,12 @@ public class Tweet extends BaseModel {
 			this.timestamp = object.getString("created_at");
 			this.body = object.getString("text");
 			this.profileImageUrl = object.getJSONObject("user").getString("profile_image_url");
+            this.mediaImageUrl = "";
+            JSONObject entityObject = object.getJSONObject("entities");
+            if(entityObject.has("media")) {
+                this.mediaImageUrl = entityObject.getJSONArray("media").getJSONObject(0)
+                        .getString("media_url");
+            }
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -84,7 +92,11 @@ public class Tweet extends BaseModel {
 		return profileImageUrl;
 	}
 
-	// Setters
+    public String getMediaImageUrl() {
+        return mediaImageUrl;
+    }
+
+    // Setters
 	public void setName(String name) {
 		this.name = name;
 	}

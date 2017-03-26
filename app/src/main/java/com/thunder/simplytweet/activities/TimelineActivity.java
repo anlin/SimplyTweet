@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -25,6 +26,7 @@ import com.thunder.simplytweet.fragments.ComposeDialogFragment;
 import com.thunder.simplytweet.models.Tweet;
 import com.thunder.simplytweet.restclient.TweetApplication;
 import com.thunder.simplytweet.restclient.TweetClient;
+import com.thunder.simplytweet.utils.ItemClickSupport;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -93,6 +95,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
                 loadMoreTweets(page);
             }
         };
+
+        ItemClickSupport.addTo(tweetsView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Toast.makeText(TimelineActivity.this ,
+                        "Go to detail", Toast.LENGTH_LONG).show();
+            }
+        });
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

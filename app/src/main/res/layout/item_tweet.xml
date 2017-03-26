@@ -63,4 +63,15 @@
         android:textSize="@dimen/tweet_timeline_name_size"
         android:layout_marginRight="16dp"
         android:id="@+id/time" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_launcher"
+        android:id="@+id/mediaImage"
+        android:layout_below="@+id/body"
+        android:layout_alignLeft="@+id/body"
+        android:layout_alignStart="@+id/body"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentRight="true" />
 </RelativeLayout>
