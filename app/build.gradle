@@ -36,6 +36,7 @@ dependencies {
     compile 'com.codepath.libraries:android-oauth-handler:1.1.0'
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:recyclerview-v7:25.3.0'
+    compile 'com.android.support:support-v4:25.3.0'
     // Picasso for remote image loading
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Android Async Http for sending async network requests

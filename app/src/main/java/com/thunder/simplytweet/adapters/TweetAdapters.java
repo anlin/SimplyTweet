@@ -80,4 +80,16 @@ public class TweetAdapters extends RecyclerView.Adapter<TweetAdapters.ViewHolder
     public int getItemCount() {
         return tweets.size();
     }
+
+   //Clear all tweets
+    public void clear(){
+        tweets.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add tweets
+    public void addAll(List<Tweet> tweets){
+        this.tweets.addAll(tweets);
+        notifyDataSetChanged();
+    }
 }

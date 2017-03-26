@@ -1,6 +1,10 @@
 package com.thunder.simplytweet.activities;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -10,8 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.thunder.simplytweet.R;
 import com.thunder.simplytweet.adapters.EndlessRecyclerViewScrollListener;
 import com.thunder.simplytweet.adapters.TweetAdapters;
@@ -23,7 +29,9 @@ import com.thunder.simplytweet.restclient.TweetClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +41,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
 
     @BindView(R.id.tweets_timeline)
     RecyclerView tweetsView;
+
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
 
 //    @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -48,6 +59,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
         setupTweetUI();
+        if(!isOnline()){
+            loadTweetsFromCache();
+            return;
+        }
         loadMoreTweets(1);
     }
 
@@ -70,9 +85,29 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (!isOnline() || !isNetworkAvailable()){
+                    Toast.makeText(TimelineActivity.this ,
+                            "The device is offline now.", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 loadMoreTweets(page);
             }
         };
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!isOnline() || !isNetworkAvailable()){
+                    Toast.makeText(TimelineActivity.this ,
+                            "The device is offline now.", Toast.LENGTH_LONG).show();
+                    swipeContainer.setRefreshing(false);
+                    return;
+                }
+                adapter.clear();
+                loadMoreTweets(0);
+            }
+        });
+
         tweetsView.addOnScrollListener(scrollListener);
     }
 
@@ -82,9 +117,16 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray){
                 tweets.addAll(Tweet.fromJson(jsonArray));
                 adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
                 Log.d("DEBUG", "timeline " + tweets.toString());
             }
         });
+    }
+
+    private void loadTweetsFromCache(){
+        List<Tweet> cacheTweets = SQLite.select().from(Tweet.class).queryList();
+        tweets.addAll(cacheTweets);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -106,6 +148,11 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
 
     @Override
     public void onFinishComposeDialog(final String tweet) {
+        if(!isOnline()){
+            Toast.makeText(TimelineActivity.this ,
+                    "The device is offline now.", Toast.LENGTH_LONG).show();
+            return;
+        }
         TweetClient tweetClient = TweetApplication.getRestClient();
         tweetClient.postTweet(tweet,new JsonHttpResponseHandler(){
             public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
@@ -115,5 +162,27 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
                 tweetsView.scrollToPosition(0);
             }
         });
+    }
+
+    // check if the device is connected to network
+    private Boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
+    // Check if the device can go online
+    private boolean isOnline(){
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process process = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = process.waitFor();
+            return exitValue == 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

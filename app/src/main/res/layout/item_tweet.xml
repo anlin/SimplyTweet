@@ -48,9 +48,11 @@
         android:layout_alignStart="@+id/user_name"
         android:layout_below="@+id/user_name"
         android:textSize="@dimen/tweet_timeline_body_size"
-        android:maxLines="3"
+        android:letterSpacing="0.01"
         android:id="@+id/body"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="16dp"
+        android:textColorLink="@color/secondary_text"
+        android:autoLink="all"/>
 
     <TextView
         tools:text="7h ago"

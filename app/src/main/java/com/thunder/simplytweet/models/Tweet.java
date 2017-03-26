@@ -25,7 +25,7 @@ public class Tweet extends BaseModel {
 
 	@PrimaryKey
 	@Column
-	Long userId;
+	Long tweetId;
 	@Column
 	String name;
 	@Column
@@ -48,7 +48,7 @@ public class Tweet extends BaseModel {
 		super();
 
 		try {
-//			this.userId = object.getLong("user_id");
+			this.tweetId = object.getLong("id");
             this.name = object.getJSONObject("user").getString("name");
 			this.screenName = object.getJSONObject("user").getString("screen_name");
 			this.timestamp = object.getString("created_at");
@@ -64,8 +64,8 @@ public class Tweet extends BaseModel {
 		return name;
 	}
 
-    public Long getUserId() {
-        return userId;
+    public Long getTweetId() {
+        return tweetId;
     }
 
     public String getScreenName() {
@@ -107,7 +107,7 @@ public class Tweet extends BaseModel {
 			}
 
 			Tweet tweet = new Tweet(tweetJson);
-//			tweet.save();
+			tweet.save();
 			tweets.add(tweet);
 		}
 		return tweets;
