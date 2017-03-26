@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,8 @@ import org.w3c.dom.Text;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.R.attr.handle;
 
 /**
  * Created by anlinsquall on 26/3/17.
@@ -67,8 +72,30 @@ public class ComposeDialogFragment extends DialogFragment {
         //Fetch title and set title
         String title = getArguments().getString("title");
         getDialog().setTitle(title);
+        handleTextChanged(composeText);
 
         //Show soft keyboard automatically and request focus to field
+    }
+
+    private void handleTextChanged(final EditText composeText) {
+        int maxLength = 140;
+        composeText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+        composeText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                remainingLength.setText("" + (140 - composeText.getText().toString().length()));
+            }
+        });
     }
 
     @NonNull

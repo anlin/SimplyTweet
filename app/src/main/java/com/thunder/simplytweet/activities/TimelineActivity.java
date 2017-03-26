@@ -3,13 +3,13 @@ package com.thunder.simplytweet.activities;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.thunder.simplytweet.R;
@@ -47,23 +47,25 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
-        setupTweet();
+        setupTweetUI();
         loadMoreTweets(1);
     }
 
     private void showComposeDialog() {
-        Log.d("DEBUG", "SHOW COMPOSE");
         FragmentManager manager = getSupportFragmentManager();
         ComposeDialogFragment composeDialogFragment = ComposeDialogFragment.newInstance("Simply Tweet");
         composeDialogFragment.show(manager, "fragment_compose");
     }
 
-    private void setupTweet() {
+    private void setupTweetUI() {
 
         tweets = new ArrayList<Tweet>();
         adapter = new TweetAdapters(this, tweets);
         tweetsView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                tweetsView.getContext(),linearLayoutManager.getOrientation());
+        tweetsView.addItemDecoration(dividerItemDecoration);
         tweetsView.setLayoutManager(linearLayoutManager);
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override

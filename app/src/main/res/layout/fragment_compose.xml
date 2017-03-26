@@ -17,7 +17,7 @@
         android:hint="@string/compose_hint" />
 
     <TextView
-        android:text=""
+        android:text="140"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/compose_text"
@@ -34,7 +34,8 @@
         android:layout_below="@+id/compose_text"
         android:layout_toLeftOf="@+id/tweet"
         android:layout_toStartOf="@+id/tweet"
-        android:id="@+id/cancel" />
+        android:id="@+id/cancel"
+        style="@style/Widget.AppCompat.Button.Colored"/>
 
     <Button
         android:text="@string/compose_tweet_button"
@@ -45,5 +46,6 @@
         android:layout_alignBottom="@+id/cancel"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        tools:text="@string/compose_tweet_button" />
+        tools:text="@string/compose_tweet_button"
+        style="@style/Widget.AppCompat.Button.Colored"/>
 </RelativeLayout>
