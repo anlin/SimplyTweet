@@ -128,7 +128,7 @@
         android:layout_toLeftOf="@+id/tweet_details_likes_count"
         android:layout_toStartOf="@+id/tweet_details_likes_count"
         android:visibility="gone"
-        android:id="@+id/tweet_details_reply_button" />
+        android:id="@+id/tweet_details_reply" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -166,12 +166,23 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/tweet_details_reply_edittext"
-        android:layout_below="@+id/tweet_details_reply_button"
         android:layout_toRightOf="@+id/tweet_details_user_profile_image"
+        android:layout_toLeftOf="@+id/tweet_details_reply_button"
+        android:layout_toStartOf="@+id/tweet_details_reply_button"
+        android:layout_alignTop="@+id/tweet_details_reply_button"
+        android:layout_alignParentBottom="true"
+        android:hint="@string/tweet_details_reply_to"
+        android:layout_below="@+id/tweet_details_timestamp" />
+
+    <Button
+        android:text="@string/tweet_details_reply_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tweet_details_timestamp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:visibility="gone"
-        />
-
+        android:layout_alignParentBottom="true"
+        android:id="@+id/tweet_details_reply_button"
+        style="@style/Widget.AppCompat.Button.Colored"/>
 </RelativeLayout>
 </ScrollView>
