@@ -6,5 +6,7 @@
     <string name="compose_hint">What\'s happening?</string>
     <string name="compose_tweet_button">Tweet</string>
     <string name="compose_cancel_button">Cancel</string>
+    <string name="tweet_details_retweet_label">RETWEETS</string>
+    <string name="tweet_details_likes_label">LIKES</string>
 
 </resources>

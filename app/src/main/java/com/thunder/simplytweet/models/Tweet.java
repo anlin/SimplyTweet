@@ -9,6 +9,7 @@ import com.thunder.simplytweet.database.MyDatabase;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
  * 
  */
 @Table(database = MyDatabase.class)
+@Parcel(analyze = {Tweet.class})
 public class Tweet extends BaseModel {
 
 	@PrimaryKey
@@ -38,6 +40,10 @@ public class Tweet extends BaseModel {
 	String profileImageUrl;
 	@Column
 	String mediaImageUrl;
+    @Column
+    long retweetsCount;
+    @Column
+    long likesCount;
 
 
 
@@ -55,6 +61,8 @@ public class Tweet extends BaseModel {
 			this.screenName = object.getJSONObject("user").getString("screen_name");
 			this.timestamp = object.getString("created_at");
 			this.body = object.getString("text");
+            this.retweetsCount = object.getLong("retweet_count");
+            this.likesCount = object.getLong("favorite_count");
 			this.profileImageUrl = object.getJSONObject("user").getString("profile_image_url");
             this.mediaImageUrl = "";
             JSONObject entityObject = object.getJSONObject("entities");
@@ -94,6 +102,14 @@ public class Tweet extends BaseModel {
 
     public String getMediaImageUrl() {
         return mediaImageUrl;
+    }
+
+    public long getRetweetsCount() {
+        return retweetsCount;
+    }
+
+    public long getLikesCount() {
+        return likesCount;
     }
 
     // Setters

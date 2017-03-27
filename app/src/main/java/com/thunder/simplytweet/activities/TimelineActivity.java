@@ -1,8 +1,10 @@
 package com.thunder.simplytweet.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Parcel;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +32,7 @@ import com.thunder.simplytweet.utils.ItemClickSupport;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +41,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class TimelineActivity extends AppCompatActivity implements ComposeDialogFragment.ComposeDialogListener {
 
@@ -99,8 +104,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         ItemClickSupport.addTo(tweetsView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Toast.makeText(TimelineActivity.this ,
-                        "Go to detail", Toast.LENGTH_LONG).show();
+                Tweet tweet = tweets.get(position);
+                Intent intent = new Intent(TimelineActivity.this, TweetDetailsActivity.class);
+                intent.putExtra("tweet", Parcels.wrap(tweet));
+                startActivity(intent);
             }
         });
 
