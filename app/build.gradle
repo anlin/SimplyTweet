@@ -37,8 +37,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:recyclerview-v7:25.3.0'
     compile 'com.android.support:support-v4:25.3.0'
-    // Picasso for remote image loading
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:design:25.3.0'
+    // Glide for remote image loading
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     // Android Async Http for sending async network requests
     compile 'com.loopj.android:android-async-http:1.4.9'
     // DBFlow for simple persistence with an ORM

@@ -202,4 +202,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         }
         return false;
     }
+
+    public void onComposeClick(View view) {
+        showComposeDialog();
+    }
 }

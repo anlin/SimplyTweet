@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.thunder.simplytweet.R;
 import com.thunder.simplytweet.models.Tweet;
 import com.thunder.simplytweet.utils.Utils;
@@ -76,9 +76,9 @@ public class TweetAdapters extends RecyclerView.Adapter<TweetAdapters.ViewHolder
         holder.userName.setText(tweet.getScreenName());
         holder.body.setText(tweet.getBody());
         holder.timeAgo.setText(Utils.getRelativeTimeAgo(tweet.getTimestamp()));
-        Picasso.with(context).load(tweet.getProfileImageUrl()).into(holder.profile);
+        Glide.with(context).load(tweet.getProfileImageUrl()).into(holder.profile);
         if(!TextUtils.isEmpty(tweet.getMediaImageUrl())){
-            Picasso.with(context).load(tweet.getMediaImageUrl()).fit().centerCrop().into(holder.mediaImage);
+            Glide.with(context).load(tweet.getMediaImageUrl()).into(holder.mediaImage);
         }
         else{
             holder.mediaImage.setVisibility(View.GONE);

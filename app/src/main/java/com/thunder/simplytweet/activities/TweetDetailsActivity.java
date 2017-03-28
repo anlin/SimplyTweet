@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 import com.thunder.simplytweet.R;
 import com.thunder.simplytweet.models.Tweet;
 import com.thunder.simplytweet.restclient.TweetApplication;
@@ -81,7 +81,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
     }
 
     private void setDataToViews(final Tweet tweet) {
-        Picasso.with(this).load(tweet.getProfileImageUrl()).into(profileImage);
+        Glide.with(this).load(tweet.getProfileImageUrl()).into(profileImage);
         name.setText(tweet.getName());
         screenName.setText(tweet.getScreenName());
         body.setText(tweet.getBody());
@@ -91,7 +91,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
         replyText.setText(tweet.getScreenName()+" ");
 
         if(!TextUtils.isEmpty(tweet.getMediaImageUrl())){
-            Picasso.with(this).load(tweet.getMediaImageUrl()).into(mediaImage);
+            Glide.with(this).load(tweet.getMediaImageUrl()).into(mediaImage);
         }else{
             mediaImage.setVisibility(View.GONE);
         }
