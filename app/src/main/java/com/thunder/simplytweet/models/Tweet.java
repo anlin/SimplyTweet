@@ -44,6 +44,8 @@ public class Tweet extends BaseModel {
     long retweetsCount;
     @Column
     long likesCount;
+	@Column
+	String extendedMediaVideoUrl;
 
 
 
@@ -65,11 +67,18 @@ public class Tweet extends BaseModel {
             this.likesCount = object.getLong("favorite_count");
 			this.profileImageUrl = object.getJSONObject("user").getString("profile_image_url");
             this.mediaImageUrl = "";
+			this.extendedMediaVideoUrl="";
             JSONObject entityObject = object.getJSONObject("entities");
             if(entityObject.has("media")) {
                 this.mediaImageUrl = entityObject.getJSONArray("media").getJSONObject(0)
                         .getString("media_url");
             }
+			if(object.has("extended_entities")){
+				JSONObject extendedEntityObject = object.getJSONObject("extended_entities");
+				this.extendedMediaVideoUrl = extendedEntityObject.getJSONArray("media").getJSONObject(0)
+						.getJSONObject("video_info").getJSONArray("variants")
+						.getJSONObject(0).getString("url");
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -112,7 +121,11 @@ public class Tweet extends BaseModel {
         return likesCount;
     }
 
-    // Setters
+	public String getExtendedMediaVideoUrl() {
+		return extendedMediaVideoUrl;
+	}
+
+	// Setters
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -8,7 +8,7 @@
     <string name="compose_cancel_button">Cancel</string>
     <string name="tweet_details_retweet_label">RETWEETS</string>
     <string name="tweet_details_likes_label">LIKES</string>
-    <string name="tweet_details_reply_button">Reply</string>
+    <string name="tweet_details_reply_button">Tweet</string>
     <string name="tweet_details_reply_to">Reply to</string>
 
 </resources>

@@ -18,6 +18,12 @@ import com.thunder.simplytweet.models.Tweet;
 import com.thunder.simplytweet.restclient.TweetApplication;
 import com.thunder.simplytweet.restclient.TweetClient;
 import com.thunder.simplytweet.utils.Utils;
+import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
+import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
+import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
+import com.volokh.danylo.video_player_manager.meta.MetaData;
+import com.volokh.danylo.video_player_manager.ui.SimpleMainThreadMediaPlayerListener;
+import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,8 +59,17 @@ public class TweetDetailsActivity extends AppCompatActivity {
     EditText replyText;
     @BindView(R.id.tweet_details_reply_button)
     Button reply;
+    @BindView(R.id.video)
+    VideoPlayerView videoPlayerView;
 
     Tweet tweet;
+
+    private VideoPlayerManager<MetaData> videoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
+        @Override
+        public void onPlayerItemChanged(MetaData metaData) {
+
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +80,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
         setDataToViews(tweet);
     }
 
-    private void setDataToViews(Tweet tweet) {
+    private void setDataToViews(final Tweet tweet) {
         Picasso.with(this).load(tweet.getProfileImageUrl()).into(profileImage);
         name.setText(tweet.getName());
         screenName.setText(tweet.getScreenName());
@@ -79,6 +94,31 @@ public class TweetDetailsActivity extends AppCompatActivity {
             Picasso.with(this).load(tweet.getMediaImageUrl()).into(mediaImage);
         }else{
             mediaImage.setVisibility(View.GONE);
+        }
+        if(!TextUtils.isEmpty(tweet.getExtendedMediaVideoUrl())){
+            mediaImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoPlayerView.setVisibility(View.VISIBLE);
+                    videoPlayerView.addMediaPlayerListener(new SimpleMainThreadMediaPlayerListener(){
+                        @Override
+                        public void onVideoPreparedMainThread() {
+                            super.onVideoPreparedMainThread();
+                        }
+
+                        @Override
+                        public void onVideoStoppedMainThread() {
+                            super.onVideoStoppedMainThread();
+                        }
+
+                        @Override
+                        public void onVideoCompletionMainThread() {
+                            super.onVideoCompletionMainThread();
+                        }
+                    });
+                    videoPlayerManager.playNewVideo(null, videoPlayerView, tweet.getExtendedMediaVideoUrl());
+                }
+            });
         }
     }
 
@@ -96,5 +136,12 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop video when activity is not in foreground
+        videoPlayerManager.stopAnyPlayback();
     }
 }
